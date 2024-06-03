@@ -3,39 +3,378 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site Under Construction</title>
+    <title>Desert Glaciers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .navbar {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #16293f;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1rem;
+        }
+        .navbar ul li {
+            font-size: 1rem;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        .navbar ul li a:hover {
+            background-color: #1d3a5f;
+        }
+        .hero {
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-            font-family: Arial, sans-serif;
+            height: 50vh;
+            text-align: center;
+            background-color: #132425;
         }
-        .container {
+        .hero h2 {
+            font-size: 2.5rem;
+            margin: 0;
+            color: white;
+            animation: fadeInUp 1s ease-out;
+        }
+        .hero h4 {
+            font-size: 1.25rem;
+            margin-top: 1rem;
+            color: #fff;
+            animation: fadeInUp 1.5s ease-out;
+        }
+        .content {
+            padding: 2rem;
+        }
+        .product-list {
             text-align: center;
         }
-        .container img {
-            width: 100px;
-            height: 100px;
+        .product-list h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 1s ease-out;
         }
-        .container h1 {
-            font-size: 2em;
-            margin: 20px 0;
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
-        .container p {
-            font-size: 1.2em;
-            color: #555;
+        .gallery img {
+            width: 30%;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+        .separator {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #16293f, transparent);
+            margin: 2rem 0;
+        }
+        .story {
+            margin-top: 2rem;
+            animation: fadeIn 2s ease-out;
+            text-align: center;
+        }
+        .story h3 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        .story h3::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: #36246a;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+        }
+        .story p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+        .gallery-box {
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .gallery-box h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .advantages {
+            text-align: center;
+        }
+        .advantages h3 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        .advantages h3::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: #16293f;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+        }
+        .advantages ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        .advantages ul li {
+            font-size: 1.125rem;
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .advantages ul li::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: #007BFF;
+        }
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #007BFF;
+            color: white;
+            margin-top: 2rem;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .lightbox-content {
+            position: relative;
+            margin: 5% auto;
+            width: 60%;
+            max-width: 700px;
+            text-align: center;
+        }
+        .lightbox-content img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .close, .prev, .next {
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: 0.3s;
+        }
+        .close {
+            top: 10%;
+            right: 35px;
+            font-size: 40px;
+        }
+        .prev {
+            left: 0;
+            border-radius: 0 3px 3px 0;
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .prev:hover, .next:hover, .close:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .gallery img {
+                width: 45%;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+            .hero h4 {
+                font-size: 1rem;
+            }
+            .gallery img {
+                width: 100%;
+            }
+            .lightbox-content {
+                width: 90%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        
-       <h1>Site Under Construction</h1>
-        <p>We're working hard to bring you a new experience. Please check back soon.</p>
+    <div class="navbar">
+        <h1>Desert Glaciers</h1>
+        <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Login</a></li>
+        </ul>
     </div>
+    <div class="hero">
+        <h2>DG Raisne Wassers</h2>
+        <h4>Drink Healthy, Live Long</h4>
+    </div>
+    <div class="content">
+        <div class="product-list">
+            <h3>Product List</h3>
+            <div class="gallery">
+                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Product 1">
+                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Product 2">
+                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Product 3">
+            </div>
+        </div>
+        <div class="separator"></div>
+        <div class="story">
+            <h3>Our Story</h3>
+            <p>Desert Glaciers has been pioneering German water treatment solutions for over a decade. Our advanced purification technology ensures that every drop of water is pure and safe for consumption, promoting a healthier lifestyle.</p>
+        </div>
+        <div class="gallery-box">
+            <h3>Image Gallery</h3>
+            <div class="gallery">
+                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 1" onclick="openLightbox();currentSlide(1)">
+                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 2" onclick="openLightbox();currentSlide(2)">
+                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 3" onclick="openLightbox();currentSlide(3)">
+            </div>
+        </div>
+        <div class="separator"></div>
+        <div class="advantages">
+            <h3>Advantages of Our Water Purifiers</h3>
+            <ul>
+                <li>Removes 99.99% of contaminants</li>
+                <li>Retains essential minerals</li>
+                <li>Energy-efficient and eco-friendly</li>
+                <li>Easy to maintain and long-lasting</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer">
+        &copy; 2024 Desert Glaciers. Developed by vsdevelopers
+    </div>
+    
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <span class="close" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <div class="mySlides">
+                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 1">
+            </div>
+            <div class="mySlides">
+                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 2">
+            </div>
+            <div class="mySlides">
+                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 3">
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+    </div>
+
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function openLightbox() {
+            document.getElementById('lightbox').style.display = 'block';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName('mySlides');
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = 'none';
+            }
+            slides[slideIndex-1].style.display = 'block';
+        }
+    </script>
 </body>
 </html>
