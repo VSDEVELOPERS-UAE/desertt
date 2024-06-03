@@ -57,7 +57,7 @@ nav ul li a:hover {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 37vh;
+            height: 15vh;
             text-align: center;
             background-color: #f4f4f4;
         }
@@ -86,26 +86,28 @@ nav ul li a:hover {
             margin-bottom: 1rem;
             animation: fadeIn 1s ease-out;
             font-family: 'Ramona reg', sans-serif;
-
-
-
-
         }
         .gallery {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-        .gallery img {
-            width: 60%;
-            border-radius: 40px;
-            transition: transform 0.3s;
-        }
-        .gallery img:hover {
-            transform: scale(1.05);
-            cursor: pointer;
-        }
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.gallery img {
+    width: calc(33.33% - 1.5rem); /* Adjust width as needed */
+    max-width: 300px; /* Set maximum width for each image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 40px;
+    transition: transform 0.3s;
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+
         .separator {
             height: 2px;
             background: linear-gradient(to right, transparent, #16293f, transparent);
@@ -298,9 +300,6 @@ nav ul li a:hover {
       <a href="about.html">About</a>
     </li>
     <li>
-      <a href="Services.html">Services</a>
-    </li>
-    <li>
       <a href="offers.html">Offers</a>
     </li>
     <li>
@@ -316,9 +315,9 @@ nav ul li a:hover {
         <div class="product-list">
             <h3>PRODUCTS</h3>
             <div class="gallery">
-                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Product 1">
-                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Product 2">
-                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Product 3">
+                <img src="https://raw.githubusercontent.com/VSDEVELOPERS-UAE/desert/main/images/pro1.jpeg" alt="Product 1">
+                <img src="https://raw.githubusercontent.com/VSDEVELOPERS-UAE/desert/main/images/pro2.jpeg" alt="Product 2">
+                <img src="https://raw.githubusercontent.com/VSDEVELOPERS-UAE/desert/main/images/pro3.jpeg" alt="Product 3">
             </div>
         </div>
         <div class="separator"></div>
