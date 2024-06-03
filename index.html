@@ -32,19 +32,19 @@
         .navbar ul {
             list-style: none;
             margin: 0;
-            padding: 0;
+            padding: -0;
             display: flex;
-            gap: 1rem;
+            gap: 7 rem;
         }
         .navbar ul li {
-            font-size: 1rem;
+            font-size: 1.rem;
         }
         .navbar ul li a {
             color: white;
             text-decoration: none;
             transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            padding: 0.5rem .7rem;
+            border-radius: 2px;
         }
         .navbar ul li a:hover {
             background-color: #1d3a5f;
@@ -84,12 +84,12 @@
         .gallery {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 1.5rem;
             flex-wrap: wrap;
         }
         .gallery img {
-            width: 30%;
-            border-radius: 10px;
+            width: 60%;
+            border-radius: 40px;
             transition: transform 0.3s;
         }
         .gallery img:hover {
@@ -203,7 +203,7 @@
             text-align: center;
         }
         .lightbox-content img {
-            width: 100%;
+            width: 70%;
             border-radius: 10px;
         }
         .close, .prev, .next {
@@ -220,8 +220,8 @@
             transition: 0.3s;
         }
         .close {
-            top: 10%;
-            right: 35px;
+            top: 5%;
+            right: 15px;
             font-size: 40px;
         }
         .prev {
@@ -280,10 +280,10 @@
 </head>
 <body>
     <div class="navbar">
-        <h1>Desert Glaciers</h1>
+        <h1></h1>
         <ul>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Login</a></li>
+		<li><a href="#">Desert Glaciersn</a></li>
+         <li><a href="#">Login</a></li>
         </ul>
     </div>
     <div class="hero">
@@ -328,53 +328,53 @@
     </div>
     
     <!-- Lightbox -->
-    <div id="lightbox" class="lightbox">
-        <span class="close" onclick="closeLightbox()">&times;</span>
-        <div class="lightbox-content">
-            <div class="mySlides">
-                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 1">
-            </div>
-            <div class="mySlides">
-                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 2">
-            </div>
-            <div class="mySlides">
-                <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 3">
-            </div>
-            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+<div id="lightbox" class="lightbox">
+    <span class="close" onclick="closeLightbox()">&times;</span>
+    <div class="lightbox-content">
+        <div class="mySlides">
+            <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 1">
         </div>
+        <div class="mySlides">
+            <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 2">
+        </div>
+        <div class="mySlides">
+            <img src="https://m.media-amazon.com/images/I/7142DVMWSlL._AC_SY606_.jpg" alt="Gallery Image 3">
+        </div>
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
     </div>
+</div>
+
+
 
     <script>
         let slideIndex = 1;
         showSlides(slideIndex);
 
         function openLightbox() {
-            document.getElementById('lightbox').style.display = 'block';
-        }
+    document.getElementById('lightbox').style.display = 'block';
+}
 
-        function closeLightbox() {
-            document.getElementById('lightbox').style.display = 'none';
-        }
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+}
 
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
-        }
+var slideIndex = 1;
+showSlides(slideIndex);
 
-        function currentSlide(n) {
-            showSlides(slideIndex = n);
-        }
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
 
-        function showSlides(n) {
-            let i;
-            let slides = document.getElementsByClassName('mySlides');
-            if (n > slides.length) {slideIndex = 1}
-            if (n < 1) {slideIndex = slides.length}
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = 'none';
-            }
-            slides[slideIndex-1].style.display = 'block';
-        }
-    </script>
-</body>
+function showSlides(n) {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    if (n > slides.length) { slideIndex = 1 }
+    if (n < 1) { slideIndex = slides.length }
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    slides[slideIndex - 1].style.display = "block";
+}
+
 </html>
