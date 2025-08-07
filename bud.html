@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Budget Manager with JSONBin.io</title>
+<style>
+  /* Reset some default styles */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    background: #f9fafb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 2rem;
+    color: #333;
+    display: flex;
+    justify-content: center;
+  }
+  .container {
+    background: #fff;
+    max-width: 400px;
+    width: 100%;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+  }
+  p {
+    font-size: 1.1rem;
+    margin: 0.4rem 0;
+  }
+  label {
+    display: block;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+  }
+  input[type="number"] {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    font-size: 1rem;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.25s ease;
+  }
+  input[type="number"]:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+  }
+  button {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #357ABD;
+  }
+  #message {
+    margin-top: 1.5rem;
+    font-weight: 600;
+    color: #e74c3c; /* error red by default */
+    min-height: 1.2em;
+  }
+  #message.success {
+    color: #27ae60; /* green */
+  }
+  /* Responsive */
+  @media (max-width: 480px) {
+    body {
+      padding: 1rem;
+    }
+    .container {
+      padding: 1.5rem 1.8rem;
+    }
+  }
+</style>
+</head>
+<body>
+  
+  <div>
+<h1>Budget Manager</h1><br>
+    <p id="balance"></p>
+    <p id="daily-allowance"></p>
+    <p id="days-left"></p>
+
+    <label for="spend">Enter amount spent today:</label>
+    <input type="number" id="spend" min="0" step="0.01" />
+    <button id="submit">Submit</button>
+    
+    <p id="message"></p>
+  </div>
+
+<script>
+  const BIN_ID = "6894739a7b4b8670d8af8d4d"; // Your Bin ID
+  const ACCESS_KEY = "$2a$10$UcGYLCtiSCKmOrTDxaDfXeO4pRQxmpzcd0VF6COF2.fUMFmObfNJe"; // Your x-access-key
+  const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+  // Default data fallback if API call fails
+  let budgetData = {
+    totalAmount: 481,
+    billAmount: 60,
+    balance: 421,
+    daysLeft: 25
+  };
+
+  async function loadData() {
+    try {
+      const response = await fetch(`${API_URL}/latest`, {
+        headers: {
+          "X-Access-Key": ACCESS_KEY
+        }
+      });
+      if (!response.ok) throw new Error("Failed to load data");
+      const json = await response.json();
+      budgetData = json.record;
+      updateUI();
+      showMessage("Data loaded successfully.");
+    } catch (error) {
+      updateUI();
+      showMessage("Error loading data, using default data.");
+      console.error(error);
+    }
+  }
+
+ async function saveData() {
+  try {
+    const response = await fetch(API_URL, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Key": ACCESS_KEY
+      },
+      body: JSON.stringify(budgetData)  // send budgetData directly, not wrapped in {record: ...}
+    });
+
+    const text = await response.text();
+    console.log("Save response status:", response.status);
+    console.log("Save response text:", text);
+
+    if (!response.ok) throw new Error("Failed to save data: " + text);
+
+    showMessage("Data saved successfully.");
+    return true;
+  } catch (error) {
+    showMessage("Error saving data: " + error.message);
+    console.error(error);
+    return false;
+  }
+}
+
+
+  function updateUI() {
+    document.getElementById("balance").textContent = `Current balance: ${budgetData.balance.toFixed(2)} AED`;
+    document.getElementById("days-left").textContent = `Days left: ${budgetData.daysLeft}`;
+    const dailyAllowance = budgetData.daysLeft > 0 ? budgetData.balance / budgetData.daysLeft : 0;
+    document.getElementById("daily-allowance").textContent = `You can spend ${dailyAllowance.toFixed(2)} AED per day`;
+  }
+
+  function showMessage(msg) {
+    document.getElementById("message").textContent = msg;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadData();
+
+    document.getElementById("submit").addEventListener("click", async () => {
+      const spendInput = document.getElementById("spend");
+      const spend = parseFloat(spendInput.value);
+
+      if (isNaN(spend) || spend < 0) {
+        showMessage("Please enter a valid positive number.");
+        return;
+      }
+
+      if (spend > budgetData.balance) {
+        showMessage("You don't have enough balance for this spend.");
+        return;
+      }
+
+      if (budgetData.daysLeft <= 0) {
+        showMessage("Budget period ended.");
+        return;
+      }
+
+      // Update numbers carefully to avoid null or NaN
+      budgetData.balance = Number(budgetData.balance) - spend;
+      budgetData.daysLeft = Number(budgetData.daysLeft) - 1;
+
+      if (isNaN(budgetData.balance)) budgetData.balance = 0;
+      if (isNaN(budgetData.daysLeft)) budgetData.daysLeft = 0;
+
+      updateUI();
+
+      console.log("Saving budgetData:", budgetData); // Debug log before saving
+
+      const saved = await saveData();
+
+      if (saved) {
+        showMessage("Spend recorded.");
+        spendInput.value = "";
+      }
+
+      if (budgetData.daysLeft === 0) {
+        showMessage(`Budget period ended. Final balance: ${budgetData.balance.toFixed(2)} AED`);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
